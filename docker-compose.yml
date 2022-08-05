@@ -1,0 +1,9 @@
+version: '3.4'
+
+services:
+  device_registry:
+    build: .
+    volumes:
+      - .:/home/HomeAutomation
+    ports:
+      - 5000:5000
