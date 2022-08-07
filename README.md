@@ -1,9 +1,9 @@
-Flow: 
-``` 
-      HTML Files: Displays Page Elements
-                       |
-                       v
-      Flask API: Interacts with HTML Files and Communicates with RESTful API
+Flow:  
+```
+      HTML Files: Displays Page Elements  
+                       |  
+                       v  
+      Flask API: Interacts with HTML Files and Communicates with RESTful API  
       
 ```  
 
@@ -96,7 +96,7 @@ Flow:
                         volumes:
                               - .:/home/HomeAutomation/
                         ports:
-                              - 5000:80
+                              - 5000:5000
       ```
       - lastly, create the ``` requirements.txt ``` file. It can be left empty for now.
       - run the docker container: ``` docker compose up ```
