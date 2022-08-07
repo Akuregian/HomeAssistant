@@ -99,4 +99,5 @@ Flow:
                               - 5000:5000
       ```
       - lastly, create the ``` requirements.txt ``` file. It can be left empty for now.
-      - run the docker container: ``` docker compose up ```
+      - build the docker container to apply an changes: ``` docker compose build ```
+      - then run the docker container: ``` docker compose up ```
