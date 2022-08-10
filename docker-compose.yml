@@ -1,9 +1,10 @@
 version: '3.4'
 
 services:
-  device_registry:
+  api:
     build: .
     volumes:
       - .:/home/HomeAutomation
     ports:
-      - 5000:5000
+      - 5001:5001
+    privileged: True  

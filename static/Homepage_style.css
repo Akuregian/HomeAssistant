@@ -1,0 +1,11 @@
+/*.display_dock {
+    display:inline-block;
+} */
+
+.display {
+    display:inline-block;
+    font-size: 25px;
+    text-align: left;
+    margin-left: 25px;
+    padding-left: 100px;
+}

@@ -4,24 +4,26 @@ import os
 import markdown
 import shelve
 
-# Raspberry Pi GPIO framework
-import RPi.GPIO as GPIO
+#import RaspberryPi GPIO framework
+from RaspberryPi_GPIO import GPIO_Commands
 
 #import framework
-from flask import Flask, g
+from flask import Flask, g, render_template, make_response
 from flask_restful import Resource, Api, reqparse
 
 # Create instance of Flask
-app = Flask(__name__)
-
+app = Flask(__name__, template_folder="../templates", static_folder="../static")
 # Create instance of API
 api = Api(app)
+
+# Raspiberry Pi Class in RaspberryPi_GPIO
+rpi = GPIO_Commands()
 
 # --------------- Calls to the database ------------------
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
-        db = g._database = shelve.open("devices.db")
+        db = g._database = shelve.open("devices.db", writeback=True)
     return db
 
 @app.teardown_appcontext
@@ -33,16 +35,24 @@ def teardown_db(exception):
 # -------------------- Display README.md at homepage ------------------------------
 @app.route("/")
 def HomePage():
-    # Open the README file
-    with open(os.path.dirname(app.root_path) + '/README.md', 'r') as markdown_file:
+    return render_template('Homepage.html')
 
-        # Read the content of the file
-        content = markdown_file.read()
+# -------------------- Toggle State Of Device ------------------------------
+@app.route('/devices/<string:identifier>/<int:status>')
+def Toggle_Pin(identifier, status):
+    shelf = get_db()
 
-        # Convert to HTML
-        return markdown.markdown(content)
+    # If the key does not exist in the data store, return a 404 error.
+    if not (identifier in shelf):
+        return {'message': 'Device not found', 'data': {}}, 404
 
-# -------------------- GET, POST Devices ------------------------------
+    shelf[identifier]['status'] = status
+    rpi.TogglePin(shelf[identifier]['GPIO_Pin'], shelf[identifier]['status'])
+    headers = {'Content-Type': 'text/html'}
+
+    return make_response(render_template("Homepage.html"), 200, headers)
+
+# -------------------- Methods = [GET, POST] - On Devices ------------------------------
 class DeviceList(Resource):
     # GET's all the devices stores in the database
     def get(self):
@@ -61,11 +71,11 @@ class DeviceList(Resource):
         parser = reqparse.RequestParser()
 
         # Arguments for database, basically the table structure
-        parser.add_argument('identifier', required=True)
-        parser.add_argument('device_type', required=True)
-        parser.add_argument('pipe_address', required=True)
-        parser.add_argument('GPIO_Pin', required=True)
-        parser.add_argument('status', required=True)
+        parser.add_argument('identifier', required=True, help="Type must be a String")
+        parser.add_argument('device_type', required=True, help="Type must be a String")
+        parser.add_argument('pipe_address', required=True, type=ascii, help="Type must be a Integer")
+        parser.add_argument('GPIO_Pin', required=True, type=int, help="Type must be a Integer")
+        parser.add_argument('status', required=True, type=int, help="Type must be a Integer and only a 0 or 1", choices=[0, 1])
 
         args = parser.parse_args()
 
@@ -74,7 +84,7 @@ class DeviceList(Resource):
 
         return {'message' : 'Device Registered', 'data' : args }, 201
 
-# -------------------- GET, DELETE Specific Device ------------------------------
+# -------------------- Methods = [GET, DELETE] - On Specific Devices ------------------------------
 class Device(Resource):
     def get(self, identifier):
         shelf = get_db()
@@ -83,7 +93,11 @@ class Device(Resource):
         if not (identifier in shelf):
             return {'message': 'Device not found', 'data': {}}, 404
 
-        return {'message': 'Device found', 'data': shelf[identifier]}, 200
+        headers = {'Content-Type': 'text/html'}
+
+        return make_response(render_template("templates/Homepage.html"), 200, headers)
+
+        #return {'message': 'Device found', 'data': shelf[identifier]}, 200
 
     def delete(self, identifier):
         shelf = get_db()
@@ -94,22 +108,7 @@ class Device(Resource):
 
         del shelf[identifier]
         return '', 204
-        
-class ToggleDeviceStatus(Resource):
-    def get(self, identifier, status):
-        shelf = get_db()
-
-        # If the key does not exist in the data store, return a 404 error.
-        if not (identifier in shelf):
-            return {'message': 'Device not found', 'data': {}}, 404
-
-        shelf[identifier]["status"] = status
-
-        return { "message" : "Changed Device Status", "data" : shelf[identifier] }, 200
-
-
 
 
 api.add_resource(DeviceList, '/devices')
 api.add_resource(Device, '/devices/<string:identifier>')
-api.add_resource(ToggleDeviceStatus, '/devices/<string:identifier>/<string:status>')
