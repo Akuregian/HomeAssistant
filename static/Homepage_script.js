@@ -1,10 +1,16 @@
-// Grabs the JSON data from the web-page
-$(document).ready(function () {
-    console.log("Hello, welcome");
-    $.getJSON('http://localhost:5001/devices', function (data) {
-        $.each(data.data, function (index, obj) {
-            console.log(obj)
-            $(".display_dock").append("<div class=display>" + obj.identifier + "</div>");
-        })
-    });
-});
+window.onload = async function fetchText() {
+    let response = await fetch('http://localhost:5001/devices');
+    let data = await response.json();
+    console.log(data);
+
+    for(var i = 0; i < data.data.length; i++) {
+        // Create a div 'container'
+        const device = document.createElement('div');
+        const identifier = document.createTextNode(data.data[i].identifier);
+        device.appendChild(identifier);
+
+        // Grab the element we want to insert the new container into
+        const current_div = document.getElementById("display_dock");
+        current_div.appendChild(device);
+    }
+}
