@@ -92,10 +92,10 @@ class Device(Resource):
         # If the key does not exist in the data store, return a 404 error.
         if not (identifier in shelf):
             return {'message': 'Device not found', 'data': {}}, 404
+        
+        device_status = shelf[identifier]["status"]
 
-        headers = {'Content-Type': 'text/html'}
-
-        return make_response(render_template("templates/Homepage.html"), 200, headers)
+        return { "status" : device_status }, 200
 
         #return {'message': 'Device found', 'data': shelf[identifier]}, 200
 

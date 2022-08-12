@@ -21,8 +21,8 @@ window.onload = async function fetchText() {
         btn.className = data.data[i].identifier;
         btn.innerHTML = "Turn On Light!";
 
-        btn.addEventListener("click", function() {
-            handleClick(btn, btn.className);
+        btn.addEventListener("click", function (event) {
+            handleClick(event, btn.className);
         }, false);
         device.appendChild(btn);
 
@@ -38,14 +38,12 @@ function handleClick(event, device_name) {
 
     var element = event.target;
 
-    console.log(device_name);
-
     // Climb up the document tree from the target of the event
     while (element) {
-        if (element.nodeName === "BUTTON" && /LED_3/.test(element.className)) {
+        if (element.nodeName === "BUTTON" && device_name == element.className) {
             // The user clicked on a <button> or clicked on an element inside a <button>
             // with a class name called "foo"
-            doSomething(element);
+            Change_Pin_Status(element, element.className);
             break;
         }
 
@@ -53,7 +51,15 @@ function handleClick(event, device_name) {
     }
 };
 
-function doSomething(button) {
-    // do something with button
-    console.log("Button Clicked!");
+async function Change_Pin_Status(button, device_name) {
+    // Grab Current Device_Status
+    let response = await fetch('http://192.168.1.250:5001/devices/' + device_name);
+    // Parse into Json Format
+    let data = await response.json();
+    // If status == 0  then set to 1, else set to 0
+    if(data.status == 0){
+        fetch('http://192.168.1.250:5001/devices/' + device_name + "/1");
+    } else {
+        fetch('http://192.168.1.250:5001/devices/' + device_name + "/0");
+    }
 }
