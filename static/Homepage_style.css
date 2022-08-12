@@ -1,3 +1,10 @@
-.display_dock {
+#display_dock {
     display:flex;
+    flex-wrap: wrap;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 150px;
+    margin-left: 100px;
 }
