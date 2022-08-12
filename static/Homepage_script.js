@@ -6,6 +6,7 @@ window.onload = async function fetchText() {
     for(var i = 0; i < data.data.length; i++) {
         // Create a div 'container'
         const device = document.createElement('div');
+        device.id = "container";
 
         // Create Header for device name
         const header = document.createElement('h1');
@@ -17,14 +18,20 @@ window.onload = async function fetchText() {
         device.appendChild(header);
 
         // Create Button Element
-        const btn = document.createElement('button');
+        const btn = document.createElement('input');
+        btn.type = "checkbox";
+        btn.id = "switch" + i
         btn.className = data.data[i].identifier;
-        btn.innerHTML = "Turn On Light!";
+        const label = document.createElement('label')
+        label.setAttribute("for", "switch" + i);
+        label.innerHTML = "Toggle";
 
+        // Add Event Listener to that button with the class name = device name
         btn.addEventListener("click", function (event) {
             handleClick(event, btn.className);
         }, false);
         device.appendChild(btn);
+        device.appendChild(label);
 
         // Grab the element we want to insert the new container into
         const current_div = document.getElementById("display_dock");
@@ -40,9 +47,8 @@ function handleClick(event, device_name) {
 
     // Climb up the document tree from the target of the event
     while (element) {
-        if (element.nodeName === "BUTTON" && device_name == element.className) {
+        if (element.nodeName === "INPUT" && device_name == element.className) {
             // The user clicked on a <button> or clicked on an element inside a <button>
-            // with a class name called "foo"
             Change_Pin_Status(element, element.className);
             break;
         }
@@ -52,6 +58,7 @@ function handleClick(event, device_name) {
 };
 
 async function Change_Pin_Status(button, device_name) {
+    console.log("Button Pressed");
     // Grab Current Device_Status
     let response = await fetch('http://192.168.1.250:5001/devices/' + device_name);
     // Parse into Json Format
