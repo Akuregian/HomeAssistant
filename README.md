@@ -9,7 +9,7 @@ Flow:
 
 ## ********************************** RaspberryPi Setup **********************************
 
-1) Download the Raspi Pi Imager, Then Select Ubunto Server 32 or 64 bit, download this too a SD Card  
+1) Download the Raspi Pi Imager, Then Select Ubunto Server 32 or 64 bit, download this too a SD Card. I used UBUNTU 64 Bit Operating System.
   **NOTE**: If You want to avoid using a Monitor and Keyboard to set up the WIFI connection on the Raspberry Pi:  
   ```
             1. Press Control+Shift+X on the Raspberry Imager  
