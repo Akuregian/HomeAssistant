@@ -97,11 +97,14 @@ Flow:
       CMD ["python", "./run.py"]
 
       ```
-            - **WORKDIR** : Your projects working directory  
-            - **COPY** : Copy requirements.txt folder then run an install on them  
-            - **CMD** : runs 'python ./run.py' in the terminal
+      - **WORKDIR** : Your projects working directory  
+      - **COPY** : Copy requirements.txt folder then run an install on them  
+      - **CMD** : runs 'python ./run.py' in the terminal
+
+      ```
       - Create the './run.py' file used in the terminal command ``` sudo vim run.py ```  
       - Create a docker-compose.yml file: Add the following
+
       ```yaml
            version: '3.4'
 
@@ -111,8 +114,9 @@ Flow:
                         volumes:
                               - .:/home/HomeAutomation/
                         ports:
-                              - 5000:5000
+                              - 5001:5001
+                        privileged: True
       ```
-      - lastly, create the ``` requirements.txt ``` file. It can be left empty for now.
-      - build the docker container to apply an changes: ``` docker compose build ```
-      - then run the docker container: ``` docker compose up ```
+      - lastly, create the ``` requirements.txt ``` file. Add All Python Libraries to here.
+      - build the docker container to apply an changes: ``` docker-compose build ```
+      - then run the docker container: ``` docker-compose up ```
