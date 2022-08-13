@@ -30,6 +30,7 @@ window.onload = async function fetchText() {
         btn.addEventListener("click", function (event) {
             handleClick(event, btn.className);
         }, false);
+
         device.appendChild(btn);
         device.appendChild(label);
 
