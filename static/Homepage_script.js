@@ -21,10 +21,10 @@ window.onload = async function fetchText() {
         const btn = document.createElement('input');
         btn.type = "checkbox";
         btn.id = "switch" + i
+        btn.checked = data.data[i].status;
         btn.className = data.data[i].identifier;
         const label = document.createElement('label')
         label.setAttribute("for", "switch" + i);
-        label.innerHTML = "Toggle";
 
         // Add Event Listener to that button with the class name = device name
         btn.addEventListener("click", function (event) {
