@@ -7,5 +7,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+CMD ["./Wireless_Arduino_Communication/Sender.cpp"]
 CMD ["python", "./run.py"]
 
