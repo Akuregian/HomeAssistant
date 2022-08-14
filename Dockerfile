@@ -1,12 +1,13 @@
 FROM python:3
 
-WORKDIR /home/HomeAutomation
+WORKDIR /home/HomeAssistant
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
+ENV PYTHONPATH "${PYTHONPATH}:/home/HomeAssistant/RaspberryPi_GPIO"
+
 COPY . .
 
-CMD ["./Wireless_Arduino_Communication/Sender.cpp"]
 CMD ["python", "./run.py"]
 
