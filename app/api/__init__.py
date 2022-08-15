@@ -47,9 +47,11 @@ def Toggle_Pin(identifier, status):
         return {'message': 'Device not found', 'data': {}}, 404
 
     shelf[identifier]['status'] = status
-    rpi.TogglePin(shelf[identifier]['GPIO_Pin'], shelf[identifier]['status'])
-    headers = {'Content-Type': 'text/html'}
 
+    rpi.TogglePin(shelf[identifier]['GPIO_Pin'], shelf[identifier]['status'])
+    rpi.CommunicateWithArduino()
+
+    headers = {'Content-Type': 'text/html'}
     return make_response(render_template("Homepage.html"), 200, headers)
 
 # -------------------- Methods = [GET, POST] - On Devices ------------------------------

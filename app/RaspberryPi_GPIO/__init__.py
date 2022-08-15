@@ -34,7 +34,6 @@ class GPIO_Commands:
         self.radio.setAutoAck(True)       # set acknowledgement as true 
         self.radio.enableDynamicPayloads()
         self.radio.enableAckPayload()
-        self.radio.printDetails()
 
     # Toggle a Pin HIGH or LOW
     def TogglePin(self, pin, status):
@@ -44,6 +43,7 @@ class GPIO_Commands:
             GPIO.output(pin, GPIO.HIGH)
 
     def CommunicateWithArduino(self):
+        print("Communcating with arduino")
         # Open Writing Pipe
         self.radio.openWritingPipe(self.pipes[0])
         # prevent a message being sent larger than 32 bits by making it a list
@@ -52,11 +52,16 @@ class GPIO_Commands:
         while(len(sendMessage) < 32):
             sendMessage.append(0)
 
+        step = 0    
+
         while True:
+            print("Trying to Send Message to Arduino")
+            if(step > 50):
+                break
+            step = step + 1
 
             start = time.time()
             self.radio.write(sendMessage)
-            print("Message Send: {}".format(sendMessage))
             self.radio.startListening()
 
             while not self.radio.available(0):
@@ -64,6 +69,8 @@ class GPIO_Commands:
                 if(time.time() - start > 2):
                     print("Timed Out")
                     break
+           # what = self.radio.whatHappened()
+           # print(what)
 
         self.radio.stopListening()
 
