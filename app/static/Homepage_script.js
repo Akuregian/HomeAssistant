@@ -1,3 +1,4 @@
+// Function Executes when the webpage is loaded
 window.onload = async function fetchText() {
     let response = await fetch('http://192.168.1.250:5001/devices');
     let data = await response.json();
@@ -28,7 +29,11 @@ window.onload = async function fetchText() {
 
         // Add Event Listener to that button with the class name = device name
         btn.addEventListener("click", function (event) {
-            handleClick(event, btn.className);
+            Disable_Buttons(btn, true);
+            setTimeout(function() {
+                Disable_Buttons(btn, false);
+                handleClick(event, btn.className);
+            }, 2000);
         }, false);
 
         device.appendChild(btn);
@@ -40,6 +45,12 @@ window.onload = async function fetchText() {
     }
 }
 
+// Used to add a delay before the next button press
+function Disable_Buttons(btn, state) {
+    btn.disabled = state;
+}
+
+// Function determines which button pressed
 function handleClick(event, device_name) {
     event = event || window.event;
     event.target = event.target || event.srcElement;
