@@ -4,6 +4,7 @@ window.onload = async function fetchText() {
     let data = await response.json();
     console.log(data);
 
+    // Loop through the devices and create a container for them with elements
     for(var i = 0; i < data.data.length; i++) {
         // Create a div 'container'
         const device = document.createElement('div');
