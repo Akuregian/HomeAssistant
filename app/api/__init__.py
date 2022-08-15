@@ -48,9 +48,9 @@ def Toggle_Pin(identifier, status):
 
     shelf[identifier]['status'] = status
     pipe_address = int(shelf[identifier]['writing_pipe_address'], 16)
-    #pipe_address = int(pipe_address, 16)
-    
-    rpi.CommunicateWithArduino(pipe_address)
+    status_to_char_arr = []
+    status_to_char_arr.append(str(status))
+    rpi.CommunicateWithArduino(pipe_address, status_to_char_arr)
 
     headers = {'Content-Type': 'text/html'}
     return make_response(render_template("Homepage.html"), 200, headers)

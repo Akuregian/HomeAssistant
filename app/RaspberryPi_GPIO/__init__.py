@@ -45,11 +45,11 @@ class GPIO_Commands:
         else:
             GPIO.output(pin, GPIO.HIGH)
 
-    def CommunicateWithArduino(self, pipe_address):
+    def CommunicateWithArduino(self, pipe_address, status):
         # Open Writing Pipe
         self.radio.openWritingPipe(self.pipes[0])
         # prevent a message being sent larger than 32 bits by making it a list
-        sendMessage = list("Hello World")
+        sendMessage = status
         # Prepare the Message in string form with only the first 32 letters
         while(len(sendMessage) < 32):
             sendMessage.append(0)
