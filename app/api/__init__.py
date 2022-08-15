@@ -40,17 +40,33 @@ def HomePage():
 # -------------------- Toggle State Of Device ------------------------------
 @app.route('/devices/<string:identifier>/<int:status>')
 def Toggle_Pin(identifier, status):
+
+    # Grab the database
     shelf = get_db()
 
     # If the key does not exist in the data store, return a 404 error.
     if not (identifier in shelf):
         return {'message': 'Device not found', 'data': {}}, 404
 
+    # Change Status in the API
     shelf[identifier]['status'] = status
-    pipe_address = int(shelf[identifier]['writing_pipe_address'], 16)
+
+    # Grab the Device's Writing_Pipe_Address
+    pipe_address = shelf[identifier]['writing_pipe_address']
+
+    # Conver the hex Address of type string into a list of int's
+    pipe_address_list = []
+    for (first, second) in zip(pipe_address[2::2], pipe_address[3::2]):
+        new_value = "0x"+first+second
+        int_value = int(new_value, 16)
+        pipe_address_list.append(int_value)
+
+    # Prepare the 'status' of type string into a char array to be sent
     status_to_char_arr = []
     status_to_char_arr.append(str(status))
-    rpi.CommunicateWithArduino(pipe_address, status_to_char_arr)
+
+    # Send the correct arduino a message to toggle a pin
+    rpi.CommunicateWithArduino(pipe_address_list, status_to_char_arr)
 
     headers = {'Content-Type': 'text/html'}
     return make_response(render_template("Homepage.html"), 200, headers)

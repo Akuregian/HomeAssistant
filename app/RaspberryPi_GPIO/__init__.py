@@ -6,6 +6,7 @@ import RPi.GPIO as GPIO
 import time
 import spidev
 from lib_nrf24 import NRF24
+import time
 
 
 class GPIO_Commands:
@@ -47,17 +48,21 @@ class GPIO_Commands:
 
     def CommunicateWithArduino(self, pipe_address, status):
         # Open Writing Pipe
-        self.radio.openWritingPipe(self.pipes[0])
+        self.radio.openWritingPipe(pipe_address)
+
         # prevent a message being sent larger than 32 bits by making it a list
         sendMessage = status
+
         # Prepare the Message in string form with only the first 32 letters
         while(len(sendMessage) < 32):
             sendMessage.append(0)
 
+        # write to the arduino
         self.radio.write(sendMessage)
-        print("Sent the message: {}".format(sendMessage))
+        time.sleep(1/100)
         if not self.radio.isAckPayloadAvailable():
-           print("Did not recieve Acknowledgment")
+            print("Did not recieve Acknowledgment")
+            self.radio.write(sendMessage)
         elif(self.radio.isAckPayloadAvailable()):
             self.radio.read(self.ackMessg, self.ackMessgLen)
             print("Acknowledged Recieved")
