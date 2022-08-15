@@ -47,9 +47,10 @@ def Toggle_Pin(identifier, status):
         return {'message': 'Device not found', 'data': {}}, 404
 
     shelf[identifier]['status'] = status
-
-    rpi.TogglePin(shelf[identifier]['GPIO_Pin'], shelf[identifier]['status'])
-    rpi.CommunicateWithArduino()
+    pipe_address = int(shelf[identifier]['writing_pipe_address'], 16)
+    #pipe_address = int(pipe_address, 16)
+    
+    rpi.CommunicateWithArduino(pipe_address)
 
     headers = {'Content-Type': 'text/html'}
     return make_response(render_template("Homepage.html"), 200, headers)
@@ -75,7 +76,8 @@ class DeviceList(Resource):
         # Arguments for database, basically the table structure
         parser.add_argument('identifier', required=True, help="Type must be a String")
         parser.add_argument('device_type', required=True, help="Type must be a String")
-        parser.add_argument('pipe_address', required=True, type=ascii, help="Type must be a Integer")
+        parser.add_argument('writing_pipe_address', required=True, help="Type must be a Integer")
+        parser.add_argument('reading_pipe_address', required=True, help="Type must be a Integer")
         parser.add_argument('GPIO_Pin', required=True, type=int, help="Type must be a Integer")
         parser.add_argument('status', required=True, type=int, help="Type must be a Integer and only a 0 or 1", choices=[0, 1])
 

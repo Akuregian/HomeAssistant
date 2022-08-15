@@ -1,3 +1,9 @@
+DElETE Later:  
+      connections being used (GPIO.BCM Notations):  
+            nrf24l01 -> Vcc, GND, 08, 17, 10, 09, 11  
+            
+
+
 Flow:  
 ```
       HTML Files: Displays Page Elements  

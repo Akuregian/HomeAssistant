@@ -22,18 +22,21 @@ class GPIO_Commands:
         GPIO.setup(22, GPIO.OUT)
         GPIO.setup(23, GPIO.OUT)
 
-        # Initialize pipes to communicate with Arduino's
-        self.pipes = [[0xE0, 0xE0, 0xF1, 0xF1, 0xE0], [0xF1, 0xF1, 0xF0, 0xF0, 0xE0]] # Main Arduino
-
+        self.pipes = [[0xE8, 0xE8, 0xF0, 0xF0, 0xE1], [0xF0, 0xF0, 0xF0, 0xF0, 0xE1]]
+        self.ackMessg = [4]
+        self.ackMessgLen = 2
         self.radio = NRF24(GPIO, spidev.SpiDev())
-        self.radio.begin(0, 25) # Begin the Radio
+        self.radio.begin(0, 17, 4000000)
         self.radio.setPayloadSize(32)
         self.radio.setChannel(0x76)
         self.radio.setDataRate(NRF24.BR_1MBPS)
         self.radio.setPALevel(NRF24.PA_MIN)
-        self.radio.setAutoAck(True)       # set acknowledgement as true 
+        self.radio.setAutoAck(True)
         self.radio.enableDynamicPayloads()
         self.radio.enableAckPayload()
+        self.radio.openReadingPipe(1, self.pipes[1])
+        self.radio.openWritingPipe(self.pipes[0])
+        self.radio.printDetails()
 
     # Toggle a Pin HIGH or LOW
     def TogglePin(self, pin, status):
@@ -42,8 +45,7 @@ class GPIO_Commands:
         else:
             GPIO.output(pin, GPIO.HIGH)
 
-    def CommunicateWithArduino(self):
-        print("Communcating with arduino")
+    def CommunicateWithArduino(self, pipe_address):
         # Open Writing Pipe
         self.radio.openWritingPipe(self.pipes[0])
         # prevent a message being sent larger than 32 bits by making it a list
@@ -52,27 +54,18 @@ class GPIO_Commands:
         while(len(sendMessage) < 32):
             sendMessage.append(0)
 
-        step = 0    
+        self.radio.write(sendMessage)
+        print("Sent the message: {}".format(sendMessage))
+        if not self.radio.isAckPayloadAvailable():
+           print("Did not recieve Acknowledgment")
+        elif(self.radio.isAckPayloadAvailable()):
+            self.radio.read(self.ackMessg, self.ackMessgLen)
+            print("Acknowledged Recieved")
+            print(self.ackMessg[0])
+        else:
+            print("Failed to recieve Acknowledgment")
 
-        while True:
-            print("Trying to Send Message to Arduino")
-            if(step > 50):
-                break
-            step = step + 1
 
-            start = time.time()
-            self.radio.write(sendMessage)
-            self.radio.startListening()
-
-            while not self.radio.available(0):
-                time.sleep(1/100)
-                if(time.time() - start > 2):
-                    print("Timed Out")
-                    break
-           # what = self.radio.whatHappened()
-           # print(what)
-
-        self.radio.stopListening()
 
 
 
