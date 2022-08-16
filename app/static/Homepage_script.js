@@ -1,8 +1,12 @@
+var Change_Pin_Status;
+var socket;
+
 // Function Executes when the webpage is loaded
 window.onload = async function fetchText() {
+    console.log("Page Loaded Once");
     let response = await fetch('http://192.168.1.250:5001/devices');
     let data = await response.json();
-    console.log(data);
+    socket = io.connect('http://192.168.1.250:5001'); //, {transports: [websocket]});
 
     // Loop through the devices and create a container for them with elements
     for(var i = 0; i < data.data.length; i++) {
@@ -30,11 +34,7 @@ window.onload = async function fetchText() {
 
         // Add Event Listener to that button with the class name = device name
         btn.addEventListener("click", function (event) {
-            Disable_Buttons(btn, true);
-            setTimeout(function() {
-                Disable_Buttons(btn, false);
-                handleClick(event, btn.className);
-            }, 2000);
+            handleClick(event, btn.className);
         }, false);
 
         device.appendChild(btn);
@@ -44,11 +44,6 @@ window.onload = async function fetchText() {
         const current_div = document.getElementById("display_dock");
         current_div.appendChild(device);
     }
-}
-
-// Used to add a delay before the next button press
-function Disable_Buttons(btn, state) {
-    btn.disabled = state;
 }
 
 // Function determines which button pressed
@@ -70,16 +65,25 @@ function handleClick(event, device_name) {
     }
 };
 
-async function Change_Pin_Status(button, device_name) {
-    console.log("Button Pressed");
-    // Grab Current Device_Status
-    let response = await fetch('http://192.168.1.250:5001/devices/' + device_name);
-    // Parse into Json Format
-    let data = await response.json();
-    // If status == 0  then set to 1, else set to 0
-    if(data.status == 0){
-        fetch('http://192.168.1.250:5001/devices/' + device_name + "/1");
-    } else {
-        fetch('http://192.168.1.250:5001/devices/' + device_name + "/0");
+$(function(){
+    Change_Pin_Status = function(button, device_name) {
+        socket.emit('status_update_db', device_name);
+        socket.on('Response', function(data){
+            console.log(data);
+        })
     }
-}
+})
+
+//async function Change_Pin_Status(button, device_name) {
+//    // Grab Current Device_Status
+//    let response = await fetch('http://192.168.1.250:5001/devices/' + device_name);
+//    // Parse into Json Format
+//    let data = await response.json();
+//    // If status == 0  then set to 1, else set to 0
+//    if(data.status == 0){
+//        fetch('http://192.168.1.250:5001/devices/' + device_name + "/1");
+//    } else {
+//        fetch('http://192.168.1.250:5001/devices/' + device_name + "/0");
+//    }
+//}
+

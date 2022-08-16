@@ -1,7 +1,6 @@
 #__init__.py tells this is a package and not just a random folder
 
 import os
-import markdown
 import shelve
 
 #import RaspberryPi GPIO framework
@@ -10,11 +9,17 @@ from RaspberryPi_GPIO import GPIO_Commands
 #import framework
 from flask import Flask, g, render_template, make_response
 from flask_restful import Resource, Api, reqparse
+from flask_session import Session
+from flask_socketio import SocketIO, emit
 
 # Create instance of Flask
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
 # Create instance of API
 api = Api(app)
+
+Session(app)
+
+socketio = SocketIO(app, manage_session=False)
 
 # Raspiberry Pi Class in RaspberryPi_GPIO
 rpi = GPIO_Commands()
@@ -37,7 +42,47 @@ def teardown_db(exception):
 def HomePage():
     return render_template('Homepage.html')
 
-# -------------------- Toggle State Of Device ------------------------------
+# When a button is pressed, the socket sends a message
+# containg the devices name, which we use to update the database status
+@socketio.on('status_update_db')
+def update_status(data):
+   # # Grab the database
+    shelf = get_db()
+
+   # If the key does not exist in the data store, return a 404 error.
+    if not (data in shelf):
+        return {'message': 'Device not found', 'data': {}}, 404
+
+   # Change Status in the API
+    if(shelf[data]['status'] == 0):
+        shelf[data]['status'] = 1
+    elif(shelf[data]['status'] == 1):
+        shelf[data]['status'] = 0
+
+    status = shelf[data]['status']
+
+    # Prepare the 'status' of type string into a char array to be sent
+    status_to_char_arr = []
+    status_to_char_arr.append(str(status))
+
+    pipe_address = shelf[data]['writing_pipe_address']
+
+    # Convert the hex Address of type string into a list of int's
+    pipe_address_list = []
+    for (first, second) in zip(pipe_address[2::2], pipe_address[3::2]):
+        new_value = "0x"+first+second
+        int_value = int(new_value, 16)
+        pipe_address_list.append(int_value)
+
+    # Prepare the 'status' of type string into a char array to be sent
+    status_to_char_arr = []
+    status_to_char_arr.append(str(status))
+
+    rpi.CommunicateWithArduino(pipe_address_list, status_to_char_arr)
+
+    emit('Response', "Database Update for " + data + " " + str(status))
+
+# -------------------- Toggle State Of Device [TESTING PURPOSES]  ------------------------------
 @app.route('/devices/<string:identifier>/<int:status>')
 def Toggle_Pin(identifier, status):
 
@@ -70,6 +115,7 @@ def Toggle_Pin(identifier, status):
 
     headers = {'Content-Type': 'text/html'}
     return make_response(render_template("Homepage.html"), 200, headers)
+
 
 # -------------------- Methods = [GET, POST] - On Devices ------------------------------
 class DeviceList(Resource):

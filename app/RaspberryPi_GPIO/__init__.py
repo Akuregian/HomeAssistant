@@ -31,7 +31,7 @@ class GPIO_Commands:
         self.radio.setPayloadSize(32)
         self.radio.setChannel(0x76)
         self.radio.setDataRate(NRF24.BR_1MBPS)
-        self.radio.setPALevel(NRF24.PA_MIN)
+        self.radio.setPALevel(NRF24.PA_MAX)
         self.radio.setAutoAck(True)
         self.radio.enableDynamicPayloads()
         self.radio.enableAckPayload()
