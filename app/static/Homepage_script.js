@@ -1,6 +1,4 @@
-var Change_Pin_Status;
 var socket;
-
 // Function Executes when the webpage is loaded
 window.onload = async function fetchText() {
     console.log("Page Loaded Once");
@@ -33,8 +31,13 @@ window.onload = async function fetchText() {
         label.setAttribute("for", "switch" + i);
 
         // Add Event Listener to that button with the class name = device name
-        btn.addEventListener("click", function (event) {
+        btn.addEventListener("click", function (event) 
+        {
             handleClick(event, btn.className);
+            btn.disabled = true
+            setTimeout(()=> {
+                btn.disabled = false
+            }, 600)
         }, false);
 
         device.appendChild(btn);
@@ -65,6 +68,7 @@ function handleClick(event, device_name) {
     }
 };
 
+var Change_Pin_Status;
 $(function(){
     Change_Pin_Status = function(button, device_name) {
         socket.emit('status_update_db', device_name);
@@ -74,16 +78,4 @@ $(function(){
     }
 })
 
-//async function Change_Pin_Status(button, device_name) {
-//    // Grab Current Device_Status
-//    let response = await fetch('http://192.168.1.250:5001/devices/' + device_name);
-//    // Parse into Json Format
-//    let data = await response.json();
-//    // If status == 0  then set to 1, else set to 0
-//    if(data.status == 0){
-//        fetch('http://192.168.1.250:5001/devices/' + device_name + "/1");
-//    } else {
-//        fetch('http://192.168.1.250:5001/devices/' + device_name + "/0");
-//    }
-//}
 

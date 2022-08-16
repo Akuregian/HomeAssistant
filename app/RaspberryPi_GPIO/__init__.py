@@ -57,18 +57,29 @@ class GPIO_Commands:
         while(len(sendMessage) < 32):
             sendMessage.append(0)
 
-        # write to the arduino
-        self.radio.write(sendMessage)
-        time.sleep(1/100)
-        if not self.radio.isAckPayloadAvailable():
-            print("Did not recieve Acknowledgment")
+        while(not self.radio.isAckPayloadAvailable()):
             self.radio.write(sendMessage)
-        elif(self.radio.isAckPayloadAvailable()):
-            self.radio.read(self.ackMessg, self.ackMessgLen)
-            print("Acknowledged Recieved")
-            print(self.ackMessg[0])
-        else:
-            print("Failed to recieve Acknowledgment")
+
+        self.radio.startListening()
+
+        self.radio.read(self.ackMessg, self.ackMessgLen)
+        print(self.ackMessg)
+        self.radio.stopListening()
+
+        ## write to the arduino
+        #self.radio.write(sendMessage)
+        #time.sleep(1/100)
+
+
+        #if not self.radio.isAckPayloadAvailable():
+        #    print("Did not recieve Acknowledgment")
+        #    self.radio.write(sendMessage)
+        #elif(self.radio.isAckPayloadAvailable()):
+        #    self.radio.read(self.ackMessg, self.ackMessgLen)
+        #    print("Acknowledged Recieved")
+        #    print(self.ackMessg[0])
+        #else:
+        #    print("Failed to recieve Acknowledgment")
 
 
 
