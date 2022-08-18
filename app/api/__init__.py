@@ -63,6 +63,9 @@ def update_status(data):
 
     pipe_address = shelf[data]['writing_pipe_address']
 
+    shelf.sync()
+    shelf.close()
+
     # Convert the hex Address of type string into a list of int's
     pipe_address_list = []
     for (first, second) in zip(pipe_address[2::2], pipe_address[3::2]):
