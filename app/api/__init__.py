@@ -56,14 +56,10 @@ def update_status(data):
    # Change Status in the API
     if(shelf[data]['status'] == 0):
         shelf[data]['status'] = 1
-    elif(shelf[data]['status'] == 1):
+    else:
         shelf[data]['status'] = 0
 
     status = shelf[data]['status']
-
-    # Prepare the 'status' of type string into a char array to be sent
-    status_to_char_arr = []
-    status_to_char_arr.append(str(status))
 
     pipe_address = shelf[data]['writing_pipe_address']
 
@@ -74,12 +70,7 @@ def update_status(data):
         int_value = int(new_value, 16)
         pipe_address_list.append(int_value)
 
-    # Prepare the 'status' of type string into a char array to be sent
-    status_to_char_arr = []
-    status_to_char_arr.append(str(status))
-
-    rpi.CommunicateWithArduino(pipe_address_list, status_to_char_arr)
-
+    rpi.CommunicateWithArduino(data, pipe_address_list, str(status))
     emit('Response', "Database Update for " + data + " " + str(status))
 
 # -------------------- Toggle State Of Device [TESTING PURPOSES]  ------------------------------
