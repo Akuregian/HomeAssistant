@@ -141,7 +141,7 @@ class DeviceList(Resource):
 
         return {'message' : 'Device Registered', 'data' : args }, 201
 
-# -------------------- Methods = [GET, DELETE] - On Specific Devices ------------------------------
+# -------------------- Methods = [GET, DELETE, POST] - On Specific Devices ------------------------------
 class Device(Resource):
     def get(self, identifier):
         shelf = get_db()
@@ -152,9 +152,8 @@ class Device(Resource):
         
         device_status = shelf[identifier]["status"]
 
-        return { "status" : device_status }, 200
-
-        #return {'message': 'Device found', 'data': shelf[identifier]}, 200
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("ChangeDeviceName.html"), 200, headers)
 
     def delete(self, identifier):
         shelf = get_db()
@@ -166,6 +165,9 @@ class Device(Resource):
         del shelf[identifier]
         return '', 204
 
+    def post(self, identifier):
+        pass
+
 
 api.add_resource(DeviceList, '/devices')
-api.add_resource(Device, '/devices/<string:identifier>')
+api.add_resource(Device, '/devices/<string:identifier>/')

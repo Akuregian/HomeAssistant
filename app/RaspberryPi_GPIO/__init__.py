@@ -53,27 +53,12 @@ class GPIO_Commands:
         # prevent a message being sent larger than 32 bits by making it a list
         sendMessage = list(device_name + " " + str(status))
 
-        print(sendMessage)
         # Prepare the Message in string form with only the first 32 letters
         while(len(sendMessage) < 32):
             sendMessage.append(0)
 
+        # Send the Message
         self.radio.write(sendMessage)
-
-        ## write to the arduino
-        #self.radio.write(sendMessage)
-        #time.sleep(1/100)
-
-
-        #if not self.radio.isAckPayloadAvailable():
-        #    print("Did not recieve Acknowledgment")
-        #    self.radio.write(sendMessage)
-        #elif(self.radio.isAckPayloadAvailable()):
-        #    self.radio.read(self.ackMessg, self.ackMessgLen)
-        #    print("Acknowledged Recieved")
-        #    print(self.ackMessg[0])
-        #else:
-        #    print("Failed to recieve Acknowledgment")
 
 
 
