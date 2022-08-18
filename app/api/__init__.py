@@ -7,7 +7,7 @@ import shelve
 from RaspberryPi_GPIO import GPIO_Commands
 
 #import framework
-from flask import Flask, g, render_template, make_response
+from flask import Flask, g, render_template, make_response, request
 from flask_restful import Resource, Api, reqparse
 from flask_session import Session
 from flask_socketio import SocketIO, emit
@@ -120,7 +120,7 @@ class DeviceList(Resource):
         for key in keys:
             devices.append(shelf[key])
 
-        return { 'message': 'Success', 'data': devices }
+        return { "data" : devices }
 
     def post(self):
         # Request Parser
@@ -141,14 +141,15 @@ class DeviceList(Resource):
 
         return {'message' : 'Device Registered', 'data' : args }, 201
 
-# -------------------- Methods = [GET, DELETE, POST] - On Specific Devices ------------------------------
+
+# -------------------- Methods = [GET, DELETE, PUT] - On Specific Devices ------------------------------
 class Device(Resource):
     def get(self, identifier):
         shelf = get_db()
 
         # If the key does not exist in the data store, return a 404 error.
         if not (identifier in shelf):
-            return {'message': 'Device not found', 'data': {}}, 404
+            return {'message': 'Device not found', 'data': identifier}, 404
         
         device_status = shelf[identifier]["status"]
 
@@ -165,7 +166,7 @@ class Device(Resource):
         del shelf[identifier]
         return '', 204
 
-    def post(self, identifier):
+    def post(self):
         pass
 
 

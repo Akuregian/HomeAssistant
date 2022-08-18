@@ -2,35 +2,8 @@ var socket;
 window.onload = async function() {
     socket = io.connect('http://192.168.1.250:5001/');
 
-    const btn = document.getElementById('change_name');
-    btn.addEventListener("click", function(event) {
-        console.log("Button Clicked!");
-        ButtonPressed();
-        btn.disabled = true;
-        setTimeout(() => {
-            btn.disabled = false;
-        }, 100)
-    })
 }
 
-function ButtonPressed(){
-    const current_device_name = document.getElementById('device_name_change').value;
-    const new_device_name = document.getElementById('device_name').value;
-    Update_Device_Name(current_device_name, new_device_name);
-}
-
-function Update_Device_Name(current_device_name, new_device_name) {
-    let msg = [current_device_name, new_device_name];
-    socket.emit('update_device_name', msg);
-    console.log("Message Sent: " + msg);
-
-    socket.on('Failed', function(data) {
-        console.log(data);
-    });
-    socket.on('Device_Name_Updated', function(data) {
-        console.log(data);
-    });
-}
 
 //window.onload = async function (){
 //
