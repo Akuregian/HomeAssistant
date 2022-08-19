@@ -17,7 +17,7 @@ app = Flask(__name__, template_folder="../templates", static_folder="../static")
 # Create instance of API
 api = Api(app)
 
-Session(app)
+#Session(app)
 
 socketio = SocketIO(app, manage_session=False)
 
@@ -42,6 +42,7 @@ def teardown_db(exception):
 def HomePage():
     return render_template('Homepage.html')
 
+# -------------------- SOCKETED CONNECTIONS ------------------------------
 # When a button is pressed, the socket sends a message
 # containg the devices name, which we use to update the database status
 @socketio.on('status_update_db')
@@ -62,9 +63,6 @@ def update_status(data):
     status = shelf[data]['status']
 
     pipe_address = shelf[data]['writing_pipe_address']
-
-    shelf.sync()
-    shelf.close()
 
     # Convert the hex Address of type string into a list of int's
     pipe_address_list = []
@@ -130,11 +128,12 @@ class DeviceList(Resource):
         parser = reqparse.RequestParser()
 
         # Arguments for database, basically the table structure
-        parser.add_argument('identifier', required=True, help="Type must be a String")
-        parser.add_argument('device_type', required=True, help="Type must be a String")
-        parser.add_argument('writing_pipe_address', required=True, help="Type must be a Integer")
-        parser.add_argument('reading_pipe_address', required=True, help="Type must be a Integer")
-        parser.add_argument('GPIO_Pin', required=True, type=int, help="Type must be a Integer")
+        parser.add_argument('identifier', required=True)
+        parser.add_argument('device_name', required=True)
+        parser.add_argument('device_type', required=True)
+        parser.add_argument('writing_pipe_address', required=True)
+        parser.add_argument('reading_pipe_address', required=True)
+        parser.add_argument('GPIO_Pin', required=True, type=int)
         parser.add_argument('status', required=True, type=int, help="Type must be a Integer and only a 0 or 1", choices=[0, 1])
 
         args = parser.parse_args()
@@ -144,19 +143,17 @@ class DeviceList(Resource):
 
         return {'message' : 'Device Registered', 'data' : args }, 201
 
-
-# -------------------- Methods = [GET, DELETE, PUT] - On Specific Devices ------------------------------
+# -------------------- Methods = [GET, DELETE, PUT] - On Specific Devices -----------------
 class Device(Resource):
     def get(self, identifier):
         shelf = get_db()
 
         # If the key does not exist in the data store, return a 404 error.
         if not (identifier in shelf):
-            return {'message': 'Device not found', 'data': identifier}, 404
+            return {'message type=[GET]:': 'Device not found', 'data': identifier}, 404
         
-        device_status = shelf[identifier]["status"]
-
         headers = {'Content-Type': 'text/html'}
+        shelf.close()
         return make_response(render_template("ChangeDeviceName.html"), 200, headers)
 
     def delete(self, identifier):
@@ -164,13 +161,27 @@ class Device(Resource):
 
         # If the key does not exist in the data store, return a 404 error.
         if not (identifier in shelf):
-            return {'message': 'Device not found', 'data': {}}, 404
+            return {'message type=[DELETE]': 'Device not found', 'data': {}}, 404
 
         del shelf[identifier]
+
         return '', 204
 
-    def post(self):
-        pass
+    def post(self, identifier):
+        shelf = get_db()
+
+        # If the key does not exist in the data store, return a 404 error.
+        if not (identifier in shelf):
+            return {'message type=[POST]': 'Device not found', 'data': identifier}, 404
+
+        results = request.form['new_name']
+
+        shelf[identifier]['device_name'] = results
+        shelf.close()
+
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("Homepage.html"), 200, headers)
+        #return {"Recieved Form" : results, "Updated Identifier:" : identifier}, 200
 
 
 api.add_resource(DeviceList, '/devices')

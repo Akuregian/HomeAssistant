@@ -9,11 +9,9 @@
 <html>
     <body>
         <h1> Change The Devices Name</h1>
-        <form action="{{url_for('device')}}", method="PUT">
-            <input type="text", name="device_name" placeholder="Device Name"/>
+        <form method="POST", type="application/json">
             <input type="text", name="new_name" placeholder="New Device Name"/>
             <input type="submit" value="Submit"/>
-
         </form>
     </body>
 
