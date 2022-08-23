@@ -1,17 +1,5 @@
-DElETE Later:  
-      connections being used (GPIO.BCM Notations):  
-            nrf24l01 -> Vcc, GND, 08, 17, 10, 09, 11  
-            
-
-
-Flow:  
-```
-      HTML Files: Displays Page Elements  
-                       |  
-                       v  
-      Flask API: Interacts with HTML Files and Communicates with RESTful API  
-      
-```  
+This program uses a Docker container, running a Flask-Restful API, on a Raspberry Pi  which hosts a website using a socketed connection to  
+manipulate GPIO pins on an arduino. An NRF24L01 Transciever/Reciever module allows the Pi and Arduino to communicate.
 
 ## ********************************** RaspberryPi Setup **********************************
 
