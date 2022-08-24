@@ -1,6 +1,8 @@
 This program uses a Docker container, running a Flask-Restful API, on a Raspberry Pi  which hosts a website using a socketed connection to  
 manipulate GPIO pins on an arduino. An NRF24L01 Transciever/Reciever module allows the Pi and Arduino to communicate.
 
+navigate to host_name when docker container is running: -> 'raspberrypi:5001'
+
 ## ********************************** RaspberryPi Setup **********************************
 
 1) Download the Raspi Pi Imager, Then Select Ubunto Server 32 or 64 bit, download this too a SD Card. I used UBUNTU 64 Bit Operating System.
