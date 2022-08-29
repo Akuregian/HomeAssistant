@@ -3,6 +3,16 @@ manipulate GPIO pins on an arduino. An NRF24L01 Transciever/Reciever module allo
 
 navigate to host_name when docker container is running: -> 'raspberrypi:5001'
 
+RaspberryPi NRF24L01 Connection:  
+VVC: 3.3v  
+GND: GND  
+CSN: GPIO 8  
+CE: GPIO 17  
+MOSI: GPIO 10  
+MISO: GPIO 9  
+SCK: GPIO 11  
+
+
 ## ********************************** RaspberryPi Setup **********************************
 
 1) Download the Raspi Pi Imager, Then Select Ubunto Server 32 or 64 bit, download this too a SD Card. I used UBUNTU 64 Bit Operating System.

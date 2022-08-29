@@ -8,7 +8,6 @@ import spidev
 from lib_nrf24 import NRF24
 import time
 
-
 class GPIO_Commands:
     # Initialize Pins as outputs
     def __init__(self):

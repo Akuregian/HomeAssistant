@@ -6,23 +6,27 @@ import shelve
 #import RaspberryPi GPIO framework
 from RaspberryPi_GPIO import GPIO_Commands
 
+#import MAX7219 Interface Library
+from Matrix_LED import Matrix
+
 #import framework
 from flask import Flask, g, render_template, make_response, request
 from flask_restful import Resource, Api, reqparse
-from flask_session import Session
 from flask_socketio import SocketIO, emit
 
 # Create instance of Flask
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
+
 # Create instance of API
 api = Api(app)
-
-#Session(app)
 
 socketio = SocketIO(app, manage_session=False)
 
 # Raspiberry Pi Class in RaspberryPi_GPIO
 rpi = GPIO_Commands()
+
+# @param: port, device
+matrix = Matrix(0, 1)
 
 # --------------- Calls to the database ------------------
 def get_db():
@@ -72,6 +76,7 @@ def update_status(data):
         pipe_address_list.append(int_value)
 
     rpi.CommunicateWithArduino(data, pipe_address_list, str(status))
+    matrix.display_message(shelf[data]['device_name'], status)
     emit('Response', "Database Update for " + data + " " + str(status))
 
 # -------------------- Toggle State Of Device [TESTING PURPOSES]  ------------------------------
@@ -98,12 +103,8 @@ def Toggle_Pin(identifier, status):
         int_value = int(new_value, 16)
         pipe_address_list.append(int_value)
 
-    # Prepare the 'status' of type string into a char array to be sent
-    status_to_char_arr = []
-    status_to_char_arr.append(str(status))
-
     # Send the correct arduino a message to toggle a pin
-    rpi.CommunicateWithArduino(pipe_address_list, status_to_char_arr)
+    rpi.CommunicateWithArduino(identifier, pipe_address_list, str(status))
 
     headers = {'Content-Type': 'text/html'}
     return make_response(render_template("Homepage.html"), 200, headers)
