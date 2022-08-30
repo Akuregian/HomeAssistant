@@ -4,6 +4,7 @@
 import time
 import RPi.GPIO as GPIO
 from datetime import datetime
+import pytz
 from luma.core.interface.serial import spi, noop
 from luma.core.render import canvas
 from luma.core.virtual import viewport
@@ -20,7 +21,7 @@ class Matrix:
     def __init__(self, _port, _device):
         self._serial = spi(port=_port, device=_device, gpio=noop())
         self._device = max7219(self._serial, width=32, height=8, block_orientation=-90)
-        self._device.contrast(5)
+        self._device.contrast(1)
         self._virtual = viewport(self._device, width=32, height=16)
 
     # Displays a Message when a device is turned on/off
@@ -34,10 +35,10 @@ class Matrix:
 
 
     # Displays the current time
-    def display_current_time(self, time_display):
-        now = datetime.now()
-        current_time = now.strftime("%H:%M:%S")
-        timeout = time_display
+    def display_current_time(self, _timeout):
+        now = datetime.now(pytz.timezone('US/Pacific'))
+        current_time = now.strftime("%H:%M")
+        timeout = _timeout
         start = time.time()
         try:
             while (time.time() < start + timeout):
@@ -50,9 +51,3 @@ class Matrix:
     # @@ Make this loop until error is cleared...
     def display_error(self):
         show_message(self._device, "Error Connecting to Server", fill="white", font=proportional(LCD_FONT))
-
-mat = Matrix(0, 1)
-if __name__ == "__main__":
-    print("Displaying Message")
-    mat.display_message("Device", 0)
-    print("End of Message")

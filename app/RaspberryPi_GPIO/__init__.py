@@ -16,9 +16,7 @@ class GPIO_Commands:
         # Set GPIO Mode
         GPIO.setmode(GPIO.BCM)
 
-        self.pipes = [ [0xE8, 0xE8, 0xF0, 0xF0, 0xE1], [0xF0, 0xF0, 0xF0, 0xF0, 0xE1] ]
-        self.ackMessg = [4]
-        self.ackMessgLen = 2
+        self.pipes = [ [0xE8, 0xE8, 0xF0, 0xF0, 0xE1] ]
         self.radio = NRF24(GPIO, spidev.SpiDev())
         self.radio.begin(0, 17, 4000000)
         self.radio.setPayloadSize(32)
@@ -27,8 +25,6 @@ class GPIO_Commands:
         self.radio.setPALevel(NRF24.PA_MAX)
         self.radio.setAutoAck(True)
         self.radio.enableDynamicPayloads()
-        self.radio.enableAckPayload()
-        self.radio.openReadingPipe(1, self.pipes[1])
         self.radio.openWritingPipe(self.pipes[0])
         self.radio.printDetails()
 
@@ -52,10 +48,6 @@ class GPIO_Commands:
 
         # Send the Message
         self.radio.write(sendMessage)
-    
-    def CleanUp(self):
-        GPIO.cleanup()
-
 
 
 

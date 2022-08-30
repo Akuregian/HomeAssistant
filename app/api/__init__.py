@@ -27,6 +27,7 @@ rpi = GPIO_Commands()
 
 # @param: port, device
 matrix = Matrix(0, 1)
+matrix.display_current_time(5)
 
 # --------------- Calls to the database ------------------
 def get_db():
@@ -40,7 +41,6 @@ def teardown_db(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.close()
-    #rpi.CleanUp()
 
 # -------------------- Display README.md at homepage ------------------------------
 @app.route("/")
@@ -78,6 +78,7 @@ def update_status(data):
 
     rpi.CommunicateWithArduino(data, pipe_address_list, str(status))
     matrix.display_message(shelf[data]['device_name'], status)
+    matrix.display_current_time(5)
     emit('Response', "Database Update for " + data + " " + str(status))
 
 # -------------------- Toggle State Of Device [TESTING PURPOSES]  ------------------------------

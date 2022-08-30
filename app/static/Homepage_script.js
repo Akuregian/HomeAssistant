@@ -37,7 +37,7 @@ window.onload = async function fetchText() {
             btn.disabled = true
             setTimeout(()=> {
                 btn.disabled = false
-            }, 600)
+            }, 4500)
         }, false);
 
         device.appendChild(btn);
