@@ -27,26 +27,19 @@ class Matrix:
     # Displays a Message when a device is turned on/off
     def display_message(self, device_name, status):
         if status == 0:
-            message = "Turning off {}".format(device_name)
+            message = "Turning OFF {}".format(device_name)
         else:
-            message = "Turning on {}".format(device_name)
+            message = "Turning ON {}".format(device_name)
 
         show_message(self._device, message, fill="white", font=proportional(LCD_FONT))
 
 
     # Displays the current time
-    def display_current_time(self, _timeout):
+    def display_current_time(self):
         now = datetime.now(pytz.timezone('US/Pacific'))
         current_time = now.strftime("%H:%M")
-        timeout = _timeout
-        start = time.time()
-        try:
-            while (time.time() < start + timeout):
-                with canvas(self._virtual) as draw:
-                    text(draw, (0, 1), current_time, fill="white", font=proportional(CP437_FONT))
-
-        except KeyboardInterrupt:
-            GPIO.cleanup()
+        with canvas(self._virtual) as draw:
+            text(draw, (0, 1), current_time, fill="white", font=proportional(CP437_FONT))
 
     # @@ Make this loop until error is cleared...
     def display_error(self):

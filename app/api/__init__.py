@@ -10,7 +10,7 @@ from RaspberryPi_GPIO import GPIO_Commands
 from Matrix_LED import Matrix
 
 #import framework
-from flask import Flask, g, render_template, make_response, request
+from flask import Flask, g, render_template, make_response, request, redirect, url_for
 from flask_restful import Resource, Api, reqparse
 from flask_socketio import SocketIO, emit
 
@@ -27,7 +27,7 @@ rpi = GPIO_Commands()
 
 # @param: port, device
 matrix = Matrix(0, 1)
-matrix.display_current_time(5)
+matrix.display_current_time()
 
 # --------------- Calls to the database ------------------
 def get_db():
@@ -78,7 +78,7 @@ def update_status(data):
 
     rpi.CommunicateWithArduino(data, pipe_address_list, str(status))
     matrix.display_message(shelf[data]['device_name'], status)
-    matrix.display_current_time(5)
+    matrix.display_current_time()
     emit('Response', "Database Update for " + data + " " + str(status))
 
 # -------------------- Toggle State Of Device [TESTING PURPOSES]  ------------------------------
@@ -182,8 +182,9 @@ class Device(Resource):
         shelf[identifier]['device_name'] = results
         shelf.close()
 
-        headers = {'Content-Type': 'text/html'}
-        return make_response(render_template("Homepage.html"), 200, headers)
+        return redirect(url_for("HomePage"))
+        #headers = {'Content-Type': 'text/html'}
+        #return make_response(render_template("Homepage.html"), 200, headers)
         #return {"Recieved Form" : results, "Updated Identifier:" : identifier}, 200
 
 

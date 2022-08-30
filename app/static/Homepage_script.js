@@ -1,10 +1,13 @@
 var socket;
+const IP_ADDRESS = 'http://192.168.1.250:5001';
+const IP_ADDRESS_DEVICES = 'http://192.168.1.250:5001/devices';
+
 // Function Executes when the webpage is loaded
 window.onload = async function fetchText() {
     console.log("Page Loaded Once");
-    let response = await fetch('http://192.168.1.250:5001/devices');
+    let response = await fetch(IP_ADDRESS_DEVICES);
     let data = await response.json();
-    socket = io.connect('http://192.168.1.250:5001'); //, {transports: [websocket]});
+    socket = io.connect(IP_ADDRESS); //, {transports: [websocket]});
 
     // Loop through the devices and create a container for them with elements
     for(var i = 0; i < data.data.length; i++) {
@@ -21,7 +24,7 @@ window.onload = async function fetchText() {
         // Append header to 'div' container
         device.appendChild(header);
 
-        // Create Button Element
+        // Create Button Element -----
         const btn = document.createElement('input');
         btn.type = "checkbox";
         btn.id = "switch" + i
@@ -40,8 +43,19 @@ window.onload = async function fetchText() {
             }, 4500)
         }, false);
 
+        const name_change_btn = document.createElement('button');
+        name_change_btn.innerHTML = 'Change Device Name'
+        name_change_btn.type = "submit"
+        name_change_btn.onclick = function() {
+            console.log("Button " + header.innerHTML + " Clicked!");
+            location.href = IP_ADDRESS_DEVICES + "/" + btn.className;
+            
+
+        }
+
         device.appendChild(btn);
         device.appendChild(label);
+        device.appendChild(name_change_btn);
 
         // Grab the element we want to insert the new container into
         const current_div = document.getElementById("display_dock");
