@@ -3,7 +3,7 @@ manipulate GPIO pins on an arduino. An NRF24L01 Transciever/Reciever module allo
 
 navigate to host_name when docker container is running: -> 'raspberrypi:5001'
 
- #RaspberryPi NRF24L01 Connection:  
+ ##RaspberryPi NRF24L01 Connection:  
  VVC: 3.3v  
  GND: GND  
  CSN: GPIO 8 CE0(SPI0)  
@@ -12,7 +12,7 @@ navigate to host_name when docker container is running: -> 'raspberrypi:5001'
  MISO: GPIO 9  
  SCK: GPIO 11  [Shared]
 
- #MAX7219 Connections:
+ ##MAX7219 Connections:
  VVC: 5.5V  
  GND: GND  
  MISO: GPIO 10 [Shared]  
