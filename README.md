@@ -6,11 +6,19 @@ navigate to host_name when docker container is running: -> 'raspberrypi:5001'
 RaspberryPi NRF24L01 Connection:  
 VVC: 3.3v  
 GND: GND  
-CSN: GPIO 8  
+CSN: GPIO 8 CE0(SPI0)  
 CE: GPIO 17  
-MOSI: GPIO 10  
+MOSI: GPIO 10  [Shared]
 MISO: GPIO 9  
-SCK: GPIO 11  
+SCK: GPIO 11  [Shared]
+
+MAX7219 Connections:
+VVC: 5.5V
+GND: GND
+MISO: GPIO 10 [Shared]
+CS: GPIO 7 CE1(SPI0)
+ClK: GPIO 11 [Shared]
+
 
 
 ## ********************************** RaspberryPi Setup **********************************

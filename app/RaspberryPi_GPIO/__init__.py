@@ -15,14 +15,8 @@ class GPIO_Commands:
 
         # Set GPIO Mode
         GPIO.setmode(GPIO.BCM)
-        
-        # !! Change this to reflect the API's GPIO pins
-        GPIO.setup(17, GPIO.OUT)
-        GPIO.setup(27, GPIO.OUT)
-        GPIO.setup(22, GPIO.OUT)
-        GPIO.setup(23, GPIO.OUT)
 
-        self.pipes = [[0xE8, 0xE8, 0xF0, 0xF0, 0xE1], [0xF0, 0xF0, 0xF0, 0xF0, 0xE1]]
+        self.pipes = [ [0xE8, 0xE8, 0xF0, 0xF0, 0xE1], [0xF0, 0xF0, 0xF0, 0xF0, 0xE1] ]
         self.ackMessg = [4]
         self.ackMessgLen = 2
         self.radio = NRF24(GPIO, spidev.SpiDev())
@@ -58,6 +52,9 @@ class GPIO_Commands:
 
         # Send the Message
         self.radio.write(sendMessage)
+    
+    def CleanUp(self):
+        GPIO.cleanup()
 
 
 
