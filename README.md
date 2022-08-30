@@ -14,11 +14,13 @@ navigate to host_name when docker container is running: -> 'raspberrypi:5001'
  SCK: GPIO 11  [Shared]
 ```
   # MAX7219 Connections:
+```json
  VVC: 5.5V  
  GND: GND  
  MISO: GPIO 10 [Shared]  
  CS: GPIO 7 CE1(SPI0)  
  ClK: GPIO 11 [Shared]  
+ ```
 
 
 ## ********************************** RaspberryPi Setup **********************************
