@@ -5,7 +5,6 @@ const IP_ADDRESS_DEVICES = 'http://192.168.1.250:5001/devices';
 
 // Function Executes when the webpage is loaded
 window.onload = async function fetchText() {
-    console.log("Page Loaded Once");
     let response = await fetch(IP_ADDRESS_DEVICES);
     let data = await response.json();
     socket = io.connect(IP_ADDRESS); //, {transports: [websocket]});
@@ -73,7 +72,7 @@ function handleClick(event, device_name) {
     while (element) {
         if (element.nodeName === "INPUT" && device_name == element.className) {
             // The user clicked on a <button> or clicked on an element inside a <button>
-            Change_Pin_Status(element, element.className);
+            Change_Pin_Status(element.className);
             break;
         }
 
@@ -82,15 +81,12 @@ function handleClick(event, device_name) {
 };
 
 // Sends a request by socket to communicate with arduino and toggle a pin HIGH/LOW
-var Change_Pin_Status;
-$(function(){
-    Change_Pin_Status = function(button, device_name) {
+function Change_Pin_Status(device_name) {
         socket.emit('status_update_db', device_name);
-        socket.on('Response', function(data){
-            console.log(data);
-        })
-    }
-})
+       // socket.on('Response', function(data){
+       //     console.log(data);
+       // })
+};
 
 // Sends a request by socket to update the clock on MAX7219 Dot Matrix
 var UpdateClock = window.setInterval(function() {

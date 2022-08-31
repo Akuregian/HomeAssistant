@@ -20,6 +20,7 @@ app = Flask(__name__, template_folder="../templates", static_folder="../static")
 # Create instance of API
 api = Api(app)
 
+# Create Instance of SocketIO Connection
 socketio = SocketIO(app, manage_session=False)
 
 # Raspiberry Pi Class in RaspberryPi_GPIO
@@ -85,7 +86,7 @@ def update_status(data):
     rpi.CommunicateWithArduino(data, pipe_address_list, str(status))
     matrix.display_message(shelf[data]['device_name'], status)
     matrix.display_current_time()
-    emit('Response', "Database Update for " + data + " " + str(status))
+    #emit('Response', "Database Update for " + data + " " + str(status))
 
 # -------------------- Toggle State Of Device [TESTING PURPOSES]  ------------------------------
 @app.route('/devices/<string:identifier>/<int:status>')
