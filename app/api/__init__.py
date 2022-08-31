@@ -42,10 +42,16 @@ def teardown_db(exception):
     if db is not None:
         db.close()
 
-# -------------------- Display README.md at homepage ------------------------------
+# -------------------- Display homepage GUI Interface ------------------------------
 @app.route("/")
 def HomePage():
     return render_template('Homepage.html')
+
+# updates the clock on MAX7219 Dot Matrix 
+@socketio.on('update_clock')
+def update_clock(data):
+    if data == 'update_request':
+        matrix.display_current_time()
 
 # -------------------- SOCKETED CONNECTIONS ------------------------------
 # When a button is pressed, the socket sends a message
@@ -110,7 +116,6 @@ def Toggle_Pin(identifier, status):
 
     headers = {'Content-Type': 'text/html'}
     return make_response(render_template("Homepage.html"), 200, headers)
-
 
 # -------------------- Methods = [GET, POST] - On Devices ------------------------------
 class DeviceList(Resource):
@@ -187,6 +192,6 @@ class Device(Resource):
         #return make_response(render_template("Homepage.html"), 200, headers)
         #return {"Recieved Form" : results, "Updated Identifier:" : identifier}, 200
 
-
+# Class is tied to a specified URL-Endpoint
 api.add_resource(DeviceList, '/devices')
 api.add_resource(Device, '/devices/<string:identifier>/')

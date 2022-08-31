@@ -1,4 +1,5 @@
 var socket;
+// @todo: Addresses need to be dynamic instead of static
 const IP_ADDRESS = 'http://192.168.1.250:5001';
 const IP_ADDRESS_DEVICES = 'http://192.168.1.250:5001/devices';
 
@@ -49,8 +50,6 @@ window.onload = async function fetchText() {
         name_change_btn.onclick = function() {
             console.log("Button " + header.innerHTML + " Clicked!");
             location.href = IP_ADDRESS_DEVICES + "/" + btn.className;
-            
-
         }
 
         device.appendChild(btn);
@@ -82,6 +81,7 @@ function handleClick(event, device_name) {
     }
 };
 
+// Sends a request by socket to communicate with arduino and toggle a pin HIGH/LOW
 var Change_Pin_Status;
 $(function(){
     Change_Pin_Status = function(button, device_name) {
@@ -92,4 +92,8 @@ $(function(){
     }
 })
 
+// Sends a request by socket to update the clock on MAX7219 Dot Matrix
+var UpdateClock = window.setInterval(function() {
+    socket.emit('update_clock', 'update_request')
+}, 5000);
 
