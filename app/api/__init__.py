@@ -43,10 +43,17 @@ def teardown_db(exception):
     if db is not None:
         db.close()
 
-# -------------------- Display homepage GUI Interface ------------------------------
-@app.route("/")
-def HomePage():
-    return render_template('Homepage.html')
+
+@app.route("/", methods = ['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+            error = "Invalid Credentials, Please Try Again."
+        else:
+            return render_template("Homepage.html")
+    return render_template('Login.html')
+
 
 # updates the clock on MAX7219 Dot Matrix 
 @socketio.on('update_clock')
@@ -188,10 +195,8 @@ class Device(Resource):
         shelf[identifier]['device_name'] = results
         shelf.close()
 
-        return redirect(url_for("HomePage"))
-        #headers = {'Content-Type': 'text/html'}
-        #return make_response(render_template("Homepage.html"), 200, headers)
-        #return {"Recieved Form" : results, "Updated Identifier:" : identifier}, 200
+        headers = {'Content-Type': 'text/html'}
+        return make_response(render_template("Homepage.html"), 200, headers)
 
 # Class is tied to a specified URL-Endpoint
 api.add_resource(DeviceList, '/devices')
