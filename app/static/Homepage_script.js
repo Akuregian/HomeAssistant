@@ -20,6 +20,7 @@ window.onload = async function fetchText() {
 
         // Set innerHTML to device name inside the header element
         header.innerHTML = data.data[i].device_name;
+        header.className = "device_name";
 
         // Append header to 'div' container
         device.appendChild(header);
