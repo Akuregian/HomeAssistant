@@ -26,7 +26,7 @@ socketio = SocketIO(app, manage_session=False)
 # Raspiberry Pi Class in RaspberryPi_GPIO
 rpi = GPIO_Commands()
 
-# @param: port, device
+# @param: port(SPI-0), device(CE-1)
 matrix = Matrix(0, 1)
 matrix.display_current_time()
 
@@ -43,7 +43,7 @@ def teardown_db(exception):
     if db is not None:
         db.close()
 
-
+# Login Route to access the Homepage (GUI-Interface)
 @app.route("/", methods = ['GET', 'POST'])
 def login():
     error = None
@@ -53,7 +53,6 @@ def login():
         else:
             return render_template("Homepage.html")
     return render_template('Login.html')
-
 
 # updates the clock on MAX7219 Dot Matrix 
 @socketio.on('update_clock')
@@ -94,36 +93,6 @@ def update_status(data):
     matrix.display_message(shelf[data]['device_name'], status)
     matrix.display_current_time()
     #emit('Response', "Database Update for " + data + " " + str(status))
-
-# -------------------- Toggle State Of Device [TESTING PURPOSES]  ------------------------------
-@app.route('/devices/<string:identifier>/<int:status>')
-def Toggle_Pin(identifier, status):
-
-    # Grab the database
-    shelf = get_db()
-
-    # If the key does not exist in the data store, return a 404 error.
-    if not (identifier in shelf):
-        return {'message': 'Device not found', 'data': {}}, 404
-
-    # Change Status in the API
-    shelf[identifier]['status'] = status
-
-    # Grab the Device's Writing_Pipe_Address
-    pipe_address = shelf[identifier]['writing_pipe_address']
-
-    # Conver the hex Address of type string into a list of int's
-    pipe_address_list = []
-    for (first, second) in zip(pipe_address[2::2], pipe_address[3::2]):
-        new_value = "0x"+first+second
-        int_value = int(new_value, 16)
-        pipe_address_list.append(int_value)
-
-    # Send the correct arduino a message to toggle a pin
-    rpi.CommunicateWithArduino(identifier, pipe_address_list, str(status))
-
-    headers = {'Content-Type': 'text/html'}
-    return make_response(render_template("Homepage.html"), 200, headers)
 
 # -------------------- Methods = [GET, POST] - On Devices ------------------------------
 class DeviceList(Resource):
