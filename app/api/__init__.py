@@ -1,6 +1,7 @@
 #__init__.py tells this is a package and not just a random folder
 
 import os
+import time
 import shelve
 
 #import RaspberryPi GPIO framework
@@ -27,7 +28,7 @@ socketio = SocketIO(app, manage_session=False)
 rpi = GPIO_Commands()
 
 # @param: port(SPI-0), device(CE-1)
-matrix = Matrix(0, 1)
+matrix = Matrix(1, 0)
 matrix.display_current_time()
 
 # --------------- Calls to the database ------------------
@@ -48,7 +49,7 @@ def teardown_db(exception):
 def login():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+        if request.form['username'] != 'anthony' or request.form['password'] != 'kuregian':
             error = "Invalid Credentials, Please Try Again."
         else:
             return render_template("Homepage.html")
@@ -117,7 +118,6 @@ class DeviceList(Resource):
         parser.add_argument('device_name', required=True)
         parser.add_argument('device_type', required=True)
         parser.add_argument('writing_pipe_address', required=True)
-        parser.add_argument('reading_pipe_address', required=True)
         parser.add_argument('GPIO_Pin', required=True, type=int)
         parser.add_argument('status', required=True, type=int, help="Type must be a Integer and only a 0 or 1", choices=[0, 1])
 

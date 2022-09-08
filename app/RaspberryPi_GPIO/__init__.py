@@ -18,7 +18,7 @@ class GPIO_Commands:
 
         self.pipes = [ [0xE8, 0xE8, 0xF0, 0xF0, 0xE1] ]
         self.radio = NRF24(GPIO, spidev.SpiDev())
-        self.radio.begin(0, 17, 4000000)
+        self.radio.begin(1, 25, 4000000) # ce-0, csn
         self.radio.setPayloadSize(32)
         self.radio.setChannel(0x76)
         self.radio.setDataRate(NRF24.BR_1MBPS)
@@ -27,13 +27,6 @@ class GPIO_Commands:
         self.radio.enableDynamicPayloads()
         self.radio.openWritingPipe(self.pipes[0])
         self.radio.printDetails()
-
-    # Toggle a Pin HIGH or LOW
-    def TogglePin(self, pin, status):
-        if status == 0:
-            GPIO.output(pin, GPIO.LOW)
-        else:
-            GPIO.output(pin, GPIO.HIGH)
 
     def CommunicateWithArduino(self, device_name, pipe_address, status):
         # Open Writing Pipe
