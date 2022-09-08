@@ -27,9 +27,9 @@ socketio = SocketIO(app, manage_session=False)
 # Raspiberry Pi Class in RaspberryPi_GPIO
 rpi = GPIO_Commands()
 
-# @param: port(SPI-0), device(CE-1)
+# @param: port(SPI-1), device(CE-0)
 matrix = Matrix(1, 0)
-matrix.display_current_time()
+matrix.display_current_time(True)
 
 # --------------- Calls to the database ------------------
 def get_db():
@@ -59,7 +59,7 @@ def login():
 @socketio.on('update_clock')
 def update_clock(data):
     if data == 'update_request':
-        matrix.display_current_time()
+        matrix.display_current_time(False)
 
 # -------------------- SOCKETED CONNECTIONS ------------------------------
 # When a button is pressed, the socket sends a message
@@ -92,7 +92,7 @@ def update_status(data):
 
     rpi.CommunicateWithArduino(data, pipe_address_list, str(status))
     matrix.display_message(shelf[data]['device_name'], status)
-    matrix.display_current_time()
+    matrix.display_current_time(True)
     #emit('Response', "Database Update for " + data + " " + str(status))
 
 # -------------------- Methods = [GET, POST] - On Devices ------------------------------

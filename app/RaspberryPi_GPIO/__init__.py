@@ -18,7 +18,7 @@ class GPIO_Commands:
 
         self.pipes = [ [0xE8, 0xE8, 0xF0, 0xF0, 0xE1] ]
         self.radio = NRF24(GPIO, spidev.SpiDev())
-        self.radio.begin(1, 25, 4000000) # ce-0, csn
+        self.radio.begin(1, 25, 4000000) # SPI-0: ce-0, csn 
         self.radio.setPayloadSize(32)
         self.radio.setChannel(0x76)
         self.radio.setDataRate(NRF24.BR_1MBPS)

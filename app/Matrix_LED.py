@@ -1,6 +1,6 @@
 # Class to interface with MAX7219 4x4 Dot Matrix
 # Used in API __init__.py file
-
+import random
 import time
 import RPi.GPIO as GPIO
 from datetime import datetime
@@ -23,23 +23,38 @@ class Matrix:
         self._device = max7219(self._serial, width=32, height=8, block_orientation=-90)
         self._device.contrast(1)
         self._virtual = viewport(self._device, width=32, height=16)
+        self.start_time = -1
+        self.message_dict = {
+            "Activating " : "Deactivating ", "Turning On " : "Turning Off ", "Powering up " : "Powering down ",
+            "Starting " : "Killing ", "Plugging in " : "Unplugging ", "Switching on " : "Switching off "
+            }
 
     # Displays a Message when a device is turned on/off
     def display_message(self, device_name, status):
+        on_message, off_message = random.choice(list(self.message_dict.items()))
         if status == 0:
-            message = "Turning OFF {}".format(device_name)
+            message = off_message + " " + device_name
         else:
-            message = "Turning ON {}".format(device_name)
+            message = on_message + " " + device_name
 
         show_message(self._device, message, fill="white", font=proportional(LCD_FONT))
+        self.display_current_time(True)
 
 
     # Displays the current time
-    def display_current_time(self):
+    def display_current_time(self, force):
+        # Grab current timezone
         now = datetime.now(pytz.timezone('US/Pacific'))
+        # Split into Hours:Minutes
         current_time = now.strftime("%H:%M")
-        with canvas(self._virtual) as draw:
-            text(draw, (0, 1), current_time, fill="white", font=proportional(CP437_FONT))
+        # Grab minutes to check against start minutes
+        minutes = now.strftime("%M")
+
+        # Update only when the minute has changed
+        if(self.start_time != minutes or force):
+            with canvas(self._virtual) as draw:
+                text(draw, (0, 1), current_time, fill="white", font=proportional(CP437_FONT))
+            self.start_time = minutes
 
     # @@ Make this loop until error is cleared...
     def display_error(self):
