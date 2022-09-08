@@ -9,7 +9,7 @@ manipulate GPIO pins on an arduino. An NRF24L01 Transciever/Reciever module allo
 
 navigate to host_name when docker container is running: -> 'raspberrypi:5001'
 
-  # RaspberryPi NRF24L01 Connection:  
+  # RaspberryPi NRF24L01 Connections:  
 ```json
  VVC: 3.3v  
  GND: GND  
@@ -19,7 +19,7 @@ navigate to host_name when docker container is running: -> 'raspberrypi:5001'
  MISO: GPIO 9  
  SCK: GPIO 11  [Shared]
 ```
-  # MAX7219 Connections:
+  # RaspberryPi MAX7219 Connections: 
 ```json
  VVC: 5.5V  
  GND: GND  
@@ -29,7 +29,7 @@ navigate to host_name when docker container is running: -> 'raspberrypi:5001'
  ```
 
 
-## ********************************** RaspberryPi Setup **********************************
+## RaspberryPi Setup  
 
 1) Download the Raspi Pi Imager, Then Select Ubunto Server 32 or 64 bit, download this too a SD Card. I used UBUNTU 64 Bit Operating System.
   **NOTE**: If You want to avoid using a Monitor and Keyboard to set up the WIFI connection on the Raspberry Pi:  
@@ -74,7 +74,7 @@ navigate to host_name when docker container is running: -> 'raspberrypi:5001'
     - Copy this Key ``` cat id_rsa.pub ``` - located in ~/home/pi/.ssh
     - Open Github: Settings -> SSH Key -> "Add New Key" -> Paste the id_rsa Key
 
-## ********************************* Installing Packages *********************************
+## Installing Packages  
 
 1) First, Lets setup Docker on our raspberryPi
       - update/upgrade: ``` sudo apt update && sudo apt upgrade -y ```
