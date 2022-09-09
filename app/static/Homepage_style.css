@@ -9,6 +9,7 @@ header {
   text-align: center;
   font-weight: bolder;
   padding: 20px;
+  margin-bottom: 25px;
 }
 
 .settings_block {
@@ -26,14 +27,6 @@ header {
   color: #BFD1E5;
 }
 
-.reboot_btn {
-   background: #f10202;
-   color: #BFD1E5;
-   float: right;
-   margin-right: 50px;
-   margin-top: 5px;
-   
-}
 
 button{
   transform: translate(15%, 35%);

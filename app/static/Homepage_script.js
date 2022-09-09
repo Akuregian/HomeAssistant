@@ -74,21 +74,7 @@ function CreateSettingsButton() {
         window.location.reload();
     }
 
-    // Create Button element
-    const btn_2 = document.createElement('button');
-    btn_2.className = "reboot_btn";
-    btn_2.innerHTML = "Reboot";
-    btn_2.onclick = function() {
-        if(confirm("Are You Sure?")) {
-            socket.emit('reboot_request', 'true');
-            socket.on('reboot_response', function(data) {
-                console.log(data);
-            })
-        }
-    }
-
     settings_block.append(btn_1);
-    settings_block.append(btn_2);
     const curr = document.getElementById('settings_block');
     curr.append(settings_block);
 

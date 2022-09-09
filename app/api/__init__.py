@@ -32,13 +32,11 @@ rpi = GPIO_Commands()
 matrix = Matrix(1, 0)
 matrix.display_current_time(True)
 
-
-
 # --------------- Calls to the database ------------------
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
-        db = g._database = shelve.open("devices.db", writeback=True)
+        db = g._database = shelve.open("Database/devices.db", writeback=True)
     return db
 
 @app.teardown_appcontext
@@ -63,13 +61,6 @@ def login():
 def update_clock(data):
     if data == 'update_request':
         matrix.display_current_time(False)
-
-# Reboot the system in case its needed
-@socketio.on('reboot_request')
-def reboot(data):
-    if(data == "true"):
-        emit('reboot_response', 'Rebooting systen in 5 Seconds')
-        # add reboot.sh file
 
 # -------------------- SOCKETED CONNECTIONS ------------------------------
 # When a button is pressed, the socket sends a message
