@@ -1,12 +1,6 @@
 This program uses a Docker container, running a Flask-Restful API, on a Raspberry Pi  which hosts a website using a socketed connection to  
 manipulate GPIO pins on an arduino. An NRF24L01 Transciever/Reciever module allows the Pi and Arduino to communicate.
 
-# Things to do:
-- Give the user the option to reboot the system in case of a freeze or error?
-- when device starts, cast out to all devices the current status in the DB
-
-
-
 navigate to host_name when docker container is running: -> 'raspberrypi:5001'
 
   # RaspberryPi NRF24L01 Connections:  

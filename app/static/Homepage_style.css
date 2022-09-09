@@ -21,13 +21,18 @@ header {
   text-align: center;
   margin-left: auto;
   margin-right: 50px;
+   margin-top: 5px;
   background: #16425B;
   color: #BFD1E5;
 }
 
-.settings_btn {
-   background: #16425B;
+.reboot_btn {
+   background: #f10202;
    color: #BFD1E5;
+   float: right;
+   margin-right: 50px;
+   margin-top: 5px;
+   
 }
 
 button{

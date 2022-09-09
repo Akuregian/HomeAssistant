@@ -58,15 +58,18 @@ def login():
             return render_template("Homepage.html")
     return render_template('Login.html')
 
-@app.route("/settings")
-def settings():
-    return render_template("SettingsPage.html")
-
 # updates the clock on MAX7219 Dot Matrix 
 @socketio.on('update_clock')
 def update_clock(data):
     if data == 'update_request':
         matrix.display_current_time(False)
+
+# Reboot the system in case its needed
+@socketio.on('reboot_request')
+def reboot(data):
+    if(data == "true"):
+        emit('reboot_response', 'Rebooting systen in 5 Seconds')
+        # add reboot.sh file
 
 # -------------------- SOCKETED CONNECTIONS ------------------------------
 # When a button is pressed, the socket sends a message

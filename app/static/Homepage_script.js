@@ -65,25 +65,30 @@ function CreateSettingsButton() {
     // Create Settings Block Div
     const settings_block = document.createElement('div');
     settings_block.className = "settings_block";
+
     // Create Button element
     const btn_1 = document.createElement('button');
-    btn_1.className = "settings_btn";
-    btn_1.innerHTML = "Settings";
+    btn_1.className = "refresh_btn";
+    btn_1.innerHTML = "Refresh";
     btn_1.onclick = function() {
-        location.href = IP_ADDRESS + '/' + 'settings'
+        window.location.reload();
     }
 
     // Create Button element
     const btn_2 = document.createElement('button');
-    btn_2.className = "refresh_btn";
-    btn_2.innerHTML = "Refresh";
+    btn_2.className = "reboot_btn";
+    btn_2.innerHTML = "Reboot";
     btn_2.onclick = function() {
-        window.location.reload();
+        if(confirm("Are You Sure?")) {
+            socket.emit('reboot_request', 'true');
+            socket.on('reboot_response', function(data) {
+                console.log(data);
+            })
+        }
     }
 
     settings_block.append(btn_1);
     settings_block.append(btn_2);
-
     const curr = document.getElementById('settings_block');
     curr.append(settings_block);
 
