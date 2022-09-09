@@ -1,11 +1,9 @@
+import { IP_ADDRESS } from './Settings.js'
 var socket;
-// @todo: Addresses need to be dynamic instead of static
-const IP_ADDRESS = 'http://192.168.1.250:5001';
-const IP_ADDRESS_DEVICES = 'http://192.168.1.250:5001/devices';
 
 // Function Executes when the webpage is loaded
 window.onload = async function fetchText() {
-    let response = await fetch(IP_ADDRESS_DEVICES);
+    let response = await fetch(IP_ADDRESS + "/devices");
     let data = await response.json();
     socket = io.connect(IP_ADDRESS); //, {transports: [websocket]});
 
@@ -48,8 +46,7 @@ window.onload = async function fetchText() {
         name_change_btn.innerHTML = 'Change Device Name'
         name_change_btn.type = "submit"
         name_change_btn.onclick = function() {
-            console.log("Button " + header.innerHTML + " Clicked!");
-            location.href = IP_ADDRESS_DEVICES + "/" + btn.className;
+            location.href = IP_ADDRESS + "/devices/" + btn.className;
         }
 
         device.appendChild(btn);
@@ -60,12 +57,41 @@ window.onload = async function fetchText() {
         const current_div = document.getElementById("display_dock");
         current_div.appendChild(device);
     }
+    CreateSettingsButton()
+}
+
+// Creates the Settings and Refresh Button
+function CreateSettingsButton() {
+    // Create Settings Block Div
+    const settings_block = document.createElement('div');
+    settings_block.className = "settings_block";
+    // Create Button element
+    const btn_1 = document.createElement('button');
+    btn_1.className = "settings_btn";
+    btn_1.innerHTML = "Settings";
+    btn_1.onclick = function() {
+        location.href = IP_ADDRESS + '/' + 'settings'
+    }
+
+    // Create Button element
+    const btn_2 = document.createElement('button');
+    btn_2.className = "refresh_btn";
+    btn_2.innerHTML = "Refresh";
+    btn_2.onclick = function() {
+        window.location.reload();
+    }
+
+    settings_block.append(btn_1);
+    settings_block.append(btn_2);
+
+    const curr = document.getElementById('settings_block');
+    curr.append(settings_block);
+
 }
 
 // Function determines which button pressed
 function handleClick(event, device_name) {
     event = event || window.event;
-    event.target = event.target || event.srcElement;
 
     var element = event.target;
 
@@ -84,9 +110,6 @@ function handleClick(event, device_name) {
 // Sends a request by socket to communicate with arduino and toggle a pin HIGH/LOW
 function Change_Pin_Status(device_name) {
         socket.emit('status_update_db', device_name);
-       // socket.on('Response', function(data){
-       //     console.log(data);
-       // })
 };
 
 // Sends a request by socket to update the clock on MAX7219 Dot Matrix

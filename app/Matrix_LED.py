@@ -26,7 +26,8 @@ class Matrix:
         self.start_time = -1
         self.message_dict = {
             "Activating " : "Deactivating ", "Turning On " : "Turning Off ", "Powering up " : "Powering down ",
-            "Starting " : "Killing ", "Plugging in " : "Unplugging ", "Switching on " : "Switching off "
+            "Starting " : "Killing ", "Plugging in " : "Unplugging ", "Switching on " : "Switching off ",
+            "Reviving " : "Slaughtering ", "Building " : "Destroying ", "Compiling " : "Decompiling"
             }
 
     # Displays a Message when a device is turned on/off
@@ -39,7 +40,6 @@ class Matrix:
 
         show_message(self._device, message, fill="white", font=proportional(LCD_FONT))
         self.display_current_time(True)
-
 
     # Displays the current time
     def display_current_time(self, force):

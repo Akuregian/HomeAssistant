@@ -17,6 +17,7 @@ from flask_socketio import SocketIO, emit
 
 # Create instance of Flask
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
+app.secret_key = "RaspberryPi"
 
 # Create instance of API
 api = Api(app)
@@ -30,6 +31,8 @@ rpi = GPIO_Commands()
 # @param: port(SPI-1), device(CE-0)
 matrix = Matrix(1, 0)
 matrix.display_current_time(True)
+
+
 
 # --------------- Calls to the database ------------------
 def get_db():
@@ -54,6 +57,10 @@ def login():
         else:
             return render_template("Homepage.html")
     return render_template('Login.html')
+
+@app.route("/settings")
+def settings():
+    return render_template("SettingsPage.html")
 
 # updates the clock on MAX7219 Dot Matrix 
 @socketio.on('update_clock')

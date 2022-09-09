@@ -1,11 +1,33 @@
 html {
-  background-color: tan
+  background-color: #D8BFAA
 }
+
+header {
+  font-size: large;
+  background-color: #EBF5EE;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  font-weight: bolder;
+  padding: 20px;
+}
+
+.settings_block {
+  background-color:#542344;
+  text-align: left;
+
+}
+
 .refresh_btn {
-  display: block;
+  text-align: center;
   margin-left: auto;
   margin-right: 50px;
-  background: #494401;
+  background: #16425B;
+  color: #BFD1E5;
+}
+
+.settings_btn {
+   background: #16425B;
+   color: #BFD1E5;
 }
 
 button{
@@ -13,23 +35,14 @@ button{
   outline: 0;
   border: 0;
   cursor: pointer;
-  background: #090130;
-  color: #FFFFFF;
+  background: #BFD1E5;
+  color: #16425B;
   border-radius: 8px;
   padding: 12px 16px 14px;
   font-size: 16px;
-  font-weight: 1000;
-  margin-bottom: 50px;
   font-weight: bolder;
-}
-
-header {
-  font-size: large;
-  background-color: #C8C8A9;
-  font-family: Arial, Helvetica, sans-serif;
+  margin-bottom: 50px;
   text-align: center;
-  font-weight: bold;
-  padding: 20px;
 }
 
 #display_dock {
@@ -51,12 +64,14 @@ h1 {
     margin: 0 auto;
     text-align: center;
     font-weight: bolder;
+    color: #808080;
 }
 
 .device_name {
   font-size: 32pt;
-  font-family: 'Luckiest Guy';
-  color: rgb(0, 0, 0);
+  font-family: "Copperplate", fantasy;
+  color: #16425B;
+
 }
   
 /* -------- Button CSS ---------*/
