@@ -104,7 +104,7 @@ function Change_Pin_Status(device_name) {
 };
 
 
-window.setInterval(function() {
+const inerval = window.setInterval(function() {
     socket.emit('update_time', 'update_request');
     socket.on('update_response', function(data) {
         console.log(data);

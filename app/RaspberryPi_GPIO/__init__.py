@@ -1,5 +1,6 @@
 # __init__.py
 # This file is used to send GPIO commands to Raspberry Pi
+# which in turn, communicates with the Arduino Mega
 
 # Raspberry Pi GPIO framework
 import RPi.GPIO as GPIO
@@ -7,6 +8,8 @@ import time
 import spidev
 from lib_nrf24 import NRF24
 import time
+import pytz
+from datetime import datetime
 
 class GPIO_Commands:
     # Initialize Pins as outputs
@@ -43,15 +46,9 @@ class GPIO_Commands:
         self.radio.write(sendMessage)
 
     def SendCurrentTime(self):
-        time_msg = list('Time: 12:05')
-        
+        now = datetime.now(pytz.timezone('US/Pacific'))
+        current_time = now.strftime("%H:%M")
+        time_msg = list('Time: ' + current_time)
         while(len(time_msg) < 32):
             time_msg.append(0)
-
         self.radio.write(time_msg)
-        
-
-
-
-
-
