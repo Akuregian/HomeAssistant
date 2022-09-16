@@ -7,9 +7,6 @@ import shelve
 #import RaspberryPi GPIO framework
 from RaspberryPi_GPIO import GPIO_Commands
 
-#import MAX7219 Interface Library
-from Matrix_LED import Matrix
-
 #import framework
 from flask import Flask, g, render_template, make_response, request, redirect, url_for
 from flask_restful import Resource, Api, reqparse
@@ -27,10 +24,6 @@ socketio = SocketIO(app, manage_session=False)
 
 # Raspiberry Pi Class in RaspberryPi_GPIO
 rpi = GPIO_Commands()
-
-# @param: port(SPI-1), device(CE-0)
-matrix = Matrix(1, 0)
-matrix.display_current_time(True)
 
 # --------------- Calls to the database ------------------
 def get_db():
@@ -56,11 +49,10 @@ def login():
             return render_template("Homepage.html")
     return render_template('Login.html')
 
-# updates the clock on MAX7219 Dot Matrix 
-@socketio.on('update_clock')
-def update_clock(data):
-    if data == 'update_request':
-        matrix.display_current_time(False)
+@socketio.on('update_time')
+def SendArduinoTime(data):
+    rpi.SendCurrentTime()
+    emit('update_response', 'updated_time')
 
 # -------------------- SOCKETED CONNECTIONS ------------------------------
 # When a button is pressed, the socket sends a message
@@ -81,8 +73,8 @@ def update_status(data):
         shelf[data]['status'] = 0
 
     status = shelf[data]['status']
-
     pipe_address = shelf[data]['writing_pipe_address']
+    device_name = shelf[data]["device_name"]
 
     # Convert the hex Address of type string into a list of int's
     pipe_address_list = []
@@ -91,10 +83,7 @@ def update_status(data):
         int_value = int(new_value, 16)
         pipe_address_list.append(int_value)
 
-    rpi.CommunicateWithArduino(data, pipe_address_list, str(status))
-    matrix.display_message(shelf[data]['device_name'], status)
-    matrix.display_current_time(True)
-    #emit('Response', "Database Update for " + data + " " + str(status))
+    rpi.CommunicateWithArduino(data[-1], device_name, pipe_address_list, str(status))
 
 # -------------------- Methods = [GET, POST] - On Devices ------------------------------
 class DeviceList(Resource):

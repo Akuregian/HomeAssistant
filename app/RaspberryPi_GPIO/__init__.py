@@ -18,7 +18,7 @@ class GPIO_Commands:
 
         self.pipes = [ [0xE8, 0xE8, 0xF0, 0xF0, 0xE1] ]
         self.radio = NRF24(GPIO, spidev.SpiDev())
-        self.radio.begin(1, 25, 4000000) # SPI-0: ce-0, csn 
+        self.radio.begin(0, 25, 4000000) # SPI-0: ce-0, csn 
         self.radio.setPayloadSize(32)
         self.radio.setChannel(0x76)
         self.radio.setDataRate(NRF24.BR_1MBPS)
@@ -28,12 +28,12 @@ class GPIO_Commands:
         self.radio.openWritingPipe(self.pipes[0])
         self.radio.printDetails()
 
-    def CommunicateWithArduino(self, device_name, pipe_address, status):
+    def CommunicateWithArduino(self, device_identifier, device_name, pipe_address, status):
         # Open Writing Pipe
-        self.radio.openWritingPipe(pipe_address)
+        #self.radio.openWritingPipe(pipe_address)
 
         # prevent a message being sent larger than 32 bits by making it a list
-        sendMessage = list(device_name + " " + str(status))
+        sendMessage = list(device_identifier + " " + str(status) + " " + device_name)
 
         # Prepare the Message in string form with only the first 32 letters
         while(len(sendMessage) < 32):
@@ -41,6 +41,15 @@ class GPIO_Commands:
 
         # Send the Message
         self.radio.write(sendMessage)
+
+    def SendCurrentTime(self):
+        time_msg = list('Time: 12:05')
+        
+        while(len(time_msg) < 32):
+            time_msg.append(0)
+
+        self.radio.write(time_msg)
+        
 
 
 

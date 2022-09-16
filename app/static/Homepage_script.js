@@ -103,8 +103,10 @@ function Change_Pin_Status(device_name) {
         socket.emit('status_update_db', device_name);
 };
 
-// Sends a request by socket to update the clock on MAX7219 Dot Matrix
-var UpdateClock = window.setInterval(function() {
-    socket.emit('update_clock', 'update_request')
-}, 5000);
 
+window.setInterval(function() {
+    socket.emit('update_time', 'update_request');
+    socket.on('update_response', function(data) {
+        console.log(data);
+    })
+}, 10000)

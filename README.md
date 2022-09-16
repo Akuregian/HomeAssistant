@@ -3,24 +3,49 @@ manipulate GPIO pins on an arduino. An NRF24L01 Transciever/Reciever module allo
 
 navigate to host_name when docker container is running: -> 'raspberrypi:5001'
 
-  # RaspberryPi NRF24L01 Connections:  
+  # RaspberryPi Connections:  
 ```json
- VVC: 3.3v  
- GND: GND  
- CSN: GPIO 8 CE0(SPI0)  
- CE: GPIO 17  
- MOSI: GPIO 10  [Shared]
- MISO: GPIO 9  
- SCK: GPIO 11  [Shared]
+NRF24L01:
+  - VCC: 3.3v  
+  - GND: GND  
+  - CSN: GPIO 25  
+  - CE: GPIO 8  
+  - MOSI: GPIO 10 
+  - MISO: GPIO 9  
+  - SCLK: GPIO 11 
+TEMP_SENSOR:
+FANS:
 ```
-  # RaspberryPi MAX7219 Connections: 
+  # Arduino Mega Connections: 
 ```json
- VVC: 5.5V  
- GND: GND  
- MISO: GPIO 10 [Shared]  
- CS: GPIO 7 CE1(SPI0)  
- ClK: GPIO 11 [Shared]  
- ```
+NRF24L01:  
+  - VCC: 3.3V  
+  - GND: GND  
+  - CSN: GPIO 8
+  - CE: GPIO 7
+  - MISO: GPIO 50
+  - MOSI: GPIO 51
+  - SClK: GPIO 52  
+MAX7219:
+  - VCC: 5V
+  - GND: GND
+  - DIN: GPIO 11
+  - CE: GPIO 10
+  - SCLK: GPIO 13
+RELAY BOARD:
+  - VCC: 5V
+  - GND: GND
+  - RELAY_1: GPIO 36
+  - RELAY_2: GPIO 40
+  - RELAY_3: GPIO 41
+  - RELAY_4: GPIO 37
+  - RELAY_5: GPIO 36
+  - RELAY_6: GPIO 39
+NEOPIXEL_RING:
+  - VCC: 5V
+  - GND: GND
+  - DIN: 2
+```
 
 
 ## RaspberryPi Setup  
