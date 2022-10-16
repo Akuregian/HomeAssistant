@@ -97,12 +97,7 @@ NEOPIXEL_RING:
 
 1) First, Lets setup Docker on our raspberryPi
       - update/upgrade: ``` sudo apt update && sudo apt upgrade -y ```
-      - Install Docker:  ```  sudo apt-get install \
-                              apt-transport-https \
-                              ca-certificates \
-                              curl \
-                              gnupg \
-                              lsb-release 
+      - Install Docker:  ```  sudo apt-get install apt-transport-https ca-certificates curl gnupg lsb-release 
                         ```  
       - Add Dockers Official GPG Key: ``` curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg  ```
       - IF YOU CHOSE A 64 BIT OPERATING SYSTEM, SUCH AS UBUNTU 64 BIT -> Then setup a stable repository for arm64:   ```  
