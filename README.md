@@ -105,7 +105,7 @@ NEOPIXEL_RING:
                                     "deb [arch=arm64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
                                     $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null 
                               ```
-      - Install Docker Engine: ``` sudo apt-get update
+      - Install Docker Engine: ``` sudo apt-get update  
                                    sudo apt-get install docker-ce docker-ce-cli containerd.io 
                               ```
       - Verify Install: ``` Docker Version ```
