@@ -1,7 +1,7 @@
 This program uses a Docker container, running a Flask-Restful API, on a Raspberry Pi  which hosts a website using a socketed connection to  
 manipulate GPIO pins on an arduino. An NRF24L01 Transciever/Reciever module allows the Pi and Arduino to communicate.
 
-navigate to host_name when docker container is running: -> 'raspberrypi:5001'
+https://user-images.githubusercontent.com/44350860/197029046-673c38a5-4bb7-4e95-b8f5-38d59fbf4a06.mp4
 
   # RaspberryPi Connections:  
 ```json
@@ -13,8 +13,6 @@ NRF24L01:
   - MOSI: GPIO 10 
   - MISO: GPIO 9  
   - SCLK: GPIO 11 
-TEMP_SENSOR:
-FANS:
 ```
   # Arduino Mega Connections: 
 ```json
@@ -46,7 +44,6 @@ NEOPIXEL_RING:
   - GND: GND
   - DIN: 2
 ```
-
 
 ## RaspberryPi Setup  
 
