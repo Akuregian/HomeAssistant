@@ -1,4 +1,4 @@
-This program uses a Docker container, running a Flask-Restful API, on a Raspberry Pi which hosts a website using a socketed connection to  
+This program uses a Docker container, running a Flask-Restful API, on a Raspberry Pi which hosts a website using a socketed connection to 
 manipulate GPIO pins on an arduino. An NRF24L01 Transciever/Reciever module allows the Pi and Arduino to communicate.
 
 https://user-images.githubusercontent.com/44350860/197029046-673c38a5-4bb7-4e95-b8f5-38d59fbf4a06.mp4
